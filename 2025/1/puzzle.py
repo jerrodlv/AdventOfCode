@@ -3,15 +3,6 @@ max_num = 99
 starting_num = 50
 input_file_path = 'input.txt'
 
-#function to rotate the wheel
-def rotate_wheel (current_pos, steps, direction):
-    new_pos = None
-    if direction == 'R':
-        new_pos = (current_pos + steps) % 100 #number must be between 0-99. Modulo operator used to wrap around
-    elif direction == 'L':
-        new_pos = (current_pos - steps) % 100
-    return new_pos
-
 try:
     # 
     with open(input_file_path, 'r') as file:
@@ -22,11 +13,19 @@ try:
         for line in lines:
             rotationDirection = line[0:1].strip()
             #print(rotationDirection)
-            numRotationSteps = line [1:].strip()
+            numRotationSteps = int(line[1:].strip())
             #print(numRotationSteps)
-            position = rotate_wheel(position, int(numRotationSteps), rotationDirection)
-            if position == 0:
-                total = total + 1
+            for step in range(numRotationSteps):
+                if rotationDirection == 'R':
+                    position = position + 1
+                    if position > max_num:
+                        position = min_num
+                elif rotationDirection == 'L':
+                    position = position - 1
+                    if position < min_num:
+                        position = max_num
+                if position == 0:
+                    total = total + 1
 except FileNotFoundError:
     print(f"Error: The file '{input_file_path}' was not found.")
 except Exception as e:
